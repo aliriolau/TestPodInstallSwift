@@ -1,0 +1,16 @@
+PODS:
+  - ALKit/Source (0.1.0)
+
+DEPENDENCIES:
+  - ALKit/Source
+
+SPEC REPOS:
+  "git@github.com:aliriolau/ALSpec.git":
+    - ALKit
+
+SPEC CHECKSUMS:
+  ALKit: 550d010515f3b7721da001d63345cadb697f7b64
+
+PODFILE CHECKSUM: 886fc91ac38e4a851f0544527a94e50b2225c633
+
+COCOAPODS: 1.8.4

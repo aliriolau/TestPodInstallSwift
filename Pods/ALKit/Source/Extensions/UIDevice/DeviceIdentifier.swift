@@ -1,0 +1,281 @@
+//
+//                            Open Your Mind!
+//
+//                  .-~~~~~~~~~-._       _.-~~~~~~~~~-.
+//              __.'              ~.   .~              `.__
+//            .'//                  \./                  \\`.
+//          .'//                     |                     \\`.
+//        .'// .-~"""""""~~~~-._     |     _,-~~~~"""""""~-. \\`.
+//      .'//.-"                 `-.  |  .-'                 "-.\\`.
+//    .'//______.============-..   \ | /   ..-============.______\\`.
+//  .'______________________________\|/______________________________`.
+//
+//  DeviceIdentifier.swift
+//  ALAppCodesSwift
+//
+//  Created by Alirio.Lau on 2019/12/24.
+//  Copyright © 2019 com.alirio.lau.www. All rights reserved.
+//
+
+import Foundation
+
+public struct DeviceIdentifier {
+  let type: DeviceFamily
+  let version: (major: Int?, minor: Int?)
+
+  init(_ identifier: String) {
+    let (type, major, minor) = DeviceIdentifier.components(with: identifier)
+    self.type = DeviceFamily(rawValue: type)
+    self.version = (major, minor)
+  }
+
+  private static func components(with identifierString: String) -> (type: String, major: Int?, minor: Int?) {
+
+    let numericCharacters: [String] = (0...9).map { "\($0)" }
+    let type = identifierString.prefix(while: { !numericCharacters.contains(String($0))})
+
+    let version = identifierString.suffix(from: type.endIndex).split(separator: ",").map { Int(String($0)) }
+
+    let major: Int? = !version.isEmpty ? version[0] : nil
+    let minor: Int? = version.count > 1 ? version[1] : nil
+
+    return (String(type), major, minor)
+  }
+}
+
+extension DeviceIdentifier: CustomStringConvertible {
+  public var description: String {
+    guard let major = version.major, let minor = version.minor
+      else { return "unknown" }
+
+    switch type {
+    case .iPhone:
+      return iPhoneString(major: major, minor: minor)
+    case .iPod:
+      return iPodString(major: major, minor: minor)
+    case .iPad:
+      return iPadString(major: major, minor: minor)
+    case .unknown:
+      return "unknown"
+    }
+  }
+
+  private func iPhoneString(major: Int, minor: Int) -> String {
+    switch (major, minor) {
+    case (1, 1):
+      return "iPhone"
+    case (1, 2):
+      return "iPhone 3G"
+    case (2, 1):
+      return "iPhone 3GS"
+    case (3, 1):
+      return "iPhone 4"
+    case (3, 2):
+      return "iPhone 4 GSM Rev A"
+    case (3, 3):
+      return "iPhone 4 CDMA"
+    case (4, 1):
+      return "iPhone 4S"
+    case (5, 1):
+      return "iPhone 5 GSM+LTE"
+    case (5, 2):
+      return "iPhone 5 CDMA+LTE"
+    case (5, 3):
+      return "iPhone 5C (GSM)"
+    case (5, 4):
+      return "iPhone 5C (Global)"
+    case (6, 1):
+      return "iPhone 5S (GSM)"
+    case (6, 2):
+      return "iPhone 5S (Global)"
+    case (7, 1):
+      return "iPhone 6 Plus"
+    case (7, 2):
+      return "iPhone 6"
+    case (8, 1):
+      return "iPhone 6s"
+    case (8, 2):
+      return "iPhone 6s Plus"
+    case (8, 3):
+      return "iPhone SE (GSM+CDMA)"
+    case (8, 4):
+      return "iPhone SE (GSM)"
+    case (9, 1):
+      return "iPhone 7"
+    case (9, 2):
+      return "iPhone 7 Plus"
+    case (9, 3):
+      return "iPhone 7"
+    case (9, 4):
+      return "iPhone 7 Plus"
+    case (10, 1):
+      return "iPhone 8"
+    case (10, 2):
+      return "iPhone 8 Plus"
+    case (10, 3):
+      return "iPhone X"
+    case (10, 4):
+      return "iPhone 8"
+    case (10, 5):
+      return "iPhone 8 Plus"
+    case (10, 6):
+      return "iPhone X"
+    case (11, 2):
+      return "iPhone XS"
+    case (11, 4):
+      return "iPhone XS Max"
+    case (11, 6):
+      return "iPhone XS Max (China)"
+    case (11, 8):
+      return "iPhone XR"
+    case (12, 1):
+      return "iPhone 11"
+    case (12, 3):
+      return "iPhone 11 Pro"
+    case (12, 5):
+      return "iPhone 11 Pro Max"
+
+    default:
+      return "unknown"
+    }
+  }
+
+  private func iPodString(major: Int, minor: Int) -> String {
+    switch (major, minor) {
+    case (1, 1):
+      return "1st Gen iPod"
+    case (2, 1):
+      return "2nd Gen iPod"
+    case (3, 1):
+      return "3rd Gen iPod"
+    case (4, 1):
+      return "4th Gen iPod"
+    case (5, 1):
+      return "5th Gen iPod"
+    case (7, 1):
+      return "6th Gen iPod"
+    case (9, 1):
+      return "7th Gen iPod"
+
+    default:
+      return "unknown"
+    }
+  }
+
+  private func iPadString(major: Int, minor: Int) -> String {
+    switch (major, minor) {
+    case (1, 1):
+      return "iPad"
+    case (1, 2):
+      return "iPad 3G"
+    case (2, 1):
+      return "2nd Gen iPad"
+    case (2, 2):
+      return "2nd Gen iPad GSM"
+    case (2, 3):
+      return "2nd Gen iPad CDMA"
+    case (2, 4):
+      return "2nd Gen iPad New Revision"
+    case (2, 5):
+      return "iPad mini"
+    case (2, 6):
+      return "iPad mini GSM+LTE"
+    case (2, 7):
+      return "iPad mini CDMA+LTE"
+    case (3, 1):
+      return "3rd Gen iPad"
+    case (3, 2):
+      return "3rd Gen iPad CDMA"
+    case (3, 3):
+      return "3rd Gen iPad GSM"
+    case (3, 4):
+      return "4th Gen iPad"
+    case (3, 5):
+      return "4th Gen iPad GSM+LTE"
+    case (3, 6):
+      return "4th Gen iPad CDMA+LTE"
+    case (4, 1):
+      return "iPad Air (WiFi)"
+    case (4, 2):
+      return "iPad Air (GSM+CDMA)"
+    case (4, 3):
+      return "iPad Air (China)"
+    case (4, 4):
+      return "iPad mini Retina (WiFi)"
+    case (4, 5):
+      return "iPad mini Retina (GSM+CDMA)"
+    case (4, 6):
+      return "iPad mini Retina (China)"
+    case (4, 7):
+      return "iPad mini 3 (WiFi)"
+    case (4, 8):
+      return "iPad mini 3 (GSM+CDMA)"
+    case (4, 9):
+      return "iPad mini 3 (China)"
+    case (5, 1):
+      return "iPad mini 4 (WiFi)"
+    case (5, 2):
+      return "iPad mini 4 (WiFi+LTE)"
+    case (5, 3):
+      return "iPad Air 2 (WiFi)"
+    case (5, 4):
+      return "iPad Air 2 (Cellular)"
+    case (6, 3):
+      return "iPad Pro (9.7 inch, Wi-Fi)"
+    case (6, 4):
+      return "iPad Pro (9.7 inch, Wi-Fi+LTE)"
+    case (6, 7):
+      return "iPad Pro (12.9 inch, Wi-Fi)"
+    case (6, 8):
+      return "iPad Pro (12.9 inch, Wi-Fi+LTE)"
+    case (6, 11):
+      return "5th Gen iPad (WiFi)"
+    case (6, 12):
+      return "5th Gen iPad (Cellular)"
+    case (7, 1):
+      return "2nd Gen iPad Pro (12.9 inch, Wi-Fi)"
+    case (7, 2):
+      return "2nd Gen iPad Pro (12.9 inch, Wi-Fi+LTE)"
+    case (7, 3):
+      return "iPad Pro (10.5 inch, Wi-Fi)"
+    case (7, 4):
+      return "iPad Pro (10.5 inch, Wi-Fi+LTE)"
+    case (7 ,5):
+      return "6th Gen iPad (WiFi)"
+    case (7, 6):
+      return "6th Gen iPad (Cellular)"
+    case (7 ,11):
+      return "7th Gen iPad (10.2 inch, WiFi)"
+    case (7, 12):
+      return "7th Gen iPad (10.2 inch, Cellular)"
+    case (8, 1):
+      return "iPad Pro (11 inch, Wi-Fi)"
+    case (8, 2):
+      return "iPad Pro (11 inch, Wi-Fi, 1TB)"
+    case (8, 3):
+      return "iPad Pro (11 inch, Wi-Fi+LTE)"
+    case (8, 4):
+      return "iPad Pro (11 inch, Wi-Fi+LTE, 1TB)"
+    case (8, 5):
+      return "3rd Gen iPad Pro (12.9 inch, Wi-Fi)"
+    case (8, 6):
+      return "3rd Gen iPad Pro (12.9 inch, Wi-Fi, 1TB)"
+    case (8, 7):
+      return "3rd Gen iPad Pro (12.9 inch, Wi-Fi+LTE)"
+    case (8, 8):
+      return "3rd Gen iPad Pro (12.9 inch, Wi-Fi+LTE, 1TB)"
+    case (11, 1):
+      return "5th Gen iPad Mini (Wi-Fi)"
+    case (11, 2):
+      return "5th Gen iPad Mini (Wi-Fi+LTE)"
+    case (11, 3):
+      return "3rd Gen iPad Air (Wi-Fi)"
+    case (11, 4):
+      return "3rd Gen iPad Air (Wi-Fi+LTE)"
+
+    default:
+      return "unknown"
+    }
+  }
+
+}
